@@ -1,0 +1,1202 @@
+﻿Foundations of Machine Learning and EDA
+Assignment 
+
+
+Question1 :  What is the difference between AI, ML, DL, and Data Science? Provide a brief explanation of each. ]
+(Hint: Compare their scope, techniques, and applications for each.) 
+
+
+Answer:  
+Terms
+	Full Form & Scope
+	Techniques Used
+	Application
+	Artificial Intelligence (AI)
+	Broad field of computer science that aims to make machines simulate human intelligence—learning, reasoning, problem-solving, and perception.
+	Rule-based systems, logic, search algorithms, expert systems, machine learning, natural language processing.
+	Chatbots, robotics, speech recognition (e.g., Siri, Alexa), self-driving cars, game playing (e.g., Chess AI).
+	Machine Learning (ML)
+	Subset of AI that focuses on teaching machines to learn from data and improve their performance without being explicitly programmed.
+	Supervised, unsupervised, and reinforcement learning; algorithms like decision trees, SVMs, k-means, random forests.
+	Spam filtering, fraud detection, recommendation systems, predictive maintenance.
+	Deep Learning (DL)
+	Subset of ML that uses artificial neural networks with many layers to model complex patterns and representations in large data.
+	Convolutional Neural Networks (CNNs), Recurrent Neural Networks (RNNs), Transformers, Autoencoders.
+	Image and speech recognition, natural language processing, autonomous vehicles, medical imaging.
+	Data Science
+	Interdisciplinary field that combines statistics, data analysis, ML, and domain knowledge to extract insights and make data-driven decisions.
+	Data cleaning, visualization, statistical analysis, ML models, big data tools (e.g., Hadoop, Spark).
+	Business analytics, market prediction, health informatics, agriculture data monitoring, finance forecasting.
+	Question 2: Explain overfitting and underfitting in ML. How can you detect and prevent them?
+ Hint: Discuss bias-variance tradeoff, cross-validation, and regularization techniques. 
+Answer:   
+1. Overfitting
+Definition:
+A model is said to overfit when it learns the training data too well, including its noise and outliers, leading to poor performance on new/unseen data.
+Symptoms:
+* Very high accuracy on training data.
+* Low accuracy on test or validation data.
+* Model is too complex (too many parameters or layers).
+Causes:
+* Too few training examples.
+* Too many features or overly complex models.
+* Lack of regularization.
+2. Underfitting
+Definition:
+A model underfits when it is too simple to capture the underlying pattern in the data, resulting in poor performance on both training and test sets.
+Symptoms:
+* Low accuracy on both training and test data.
+* The model fails to capture relationships (high bias).
+Causes:
+* Model too simple (e.g., using linear regression for nonlinear data).
+* Insufficient training or poor feature selection.
+3. Bias-Variance Tradeoff
+Bias
+	Variance
+	Error from overly simplistic models (underfitting).
+	Error from overly complex models (overfitting).
+	High bias → misses key patterns.
+	High variance → sensitive to noise.
+	Goal: Find a balance between bias and variance for optimal generalization.
+	
+
+	Question 3:How would you handle missing values in a dataset? Explain at least three methods with examples. 
+Hint: Consider deletion, mean/median imputation, and predictive modeling. 
+
+
+Answer:  To handle missing values in a dataset, with three common methods
+1. Deletion Methods
+(a) Listwise Deletion
+* What it does: Removes entire rows that contain missing values.
+* When to use: When the dataset is large and the percentage of missing data is very small (<5%).
+* Example:    df.dropna(inplace=True)
+If a dataset has:
+Name
+	Age
+	Salary
+	A
+	25
+	50000
+	B
+	NaN
+	60000
+	C
+	30
+	NaN
+	→ After deletion, only row A remains.
+(b) Pairwise Deletion
+* Uses available data for each analysis instead of dropping entire rows.
+* Used in: Correlation or regression calculations when missing data is random.
+
+2. Imputation Methods
+(a) Mean / Median / Mode Imputation
+   * What it does: Replaces missing values with the mean, median, or mode of the column.
+   * When to use: When missingness is random and data is numerical or categorical.
+   * Example:  
+df['Age'].fillna(df['Age'].mean(), inplace=True)     # Mean imputation
+df['Income'].fillna(df['Income'].median(), inplace=True)  # Median imputation
+df['Gender'].fillna(df['Gender'].mode()[0], inplace=True) # Mode imputation
+	Note:
+   * Mean → for normally distributed data.
+   * Median → for skewed data.
+   * Mode → for categorical data.
+3. Predictive Modeling
+   * What it does: Predicts missing values using other available features.
+   * How:
+   * Treat the column with missing values as the target.
+   * Use other columns as input features.
+   * Train a model (like Linear Regression, KNN, or Decision Tree) to estimate the missing values.
+   * Example:
+from sklearn.impute import KNNImputer
+imputer = KNNImputer(n_neighbors=3)
+df_imputed = imputer.fit_transform(df)
+	The KNNImputer fills missing values by averaging the values of the nearest neighbors.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question 4:What is an imbalanced dataset? Describe two techniques to handle it (theoretical + practical). 
+Hint: Discuss SMOTE, Random Under/Oversampling, and class weights in models. 
+
+
+Answer:  
+1. Imbalanced Dataset: An imbalanced dataset occurs when the classes in a classification problem are not represented equally — one class (majority) has many more samples than the other (minority).
+Example:
+ In a dataset for fraud detection:
+   * Legitimate transactions → 98%
+   * Fraudulent transactions → 2%
+This imbalance causes models to bias toward the majority class, leading to poor performance on the minority class (which is often the more important one).
+2. Why It’s a Problem
+   * Standard algorithms (e.g., Logistic Regression, Decision Trees) assume roughly equal class distribution.
+   * The model may achieve high overall accuracy by predicting only the majority class — but low recall/precision for the minority class.
+Example:
+If 98 out of 100 transactions are legitimate, a model that always predicts “legitimate” will get 98% accuracy but 0% fraud detection.
+3. Techniques to Handle Imbalanced Data
+A. Resampling Methods    
+(i) Random Oversampling
+Theory:
+   * Duplicate or randomly generate additional examples of the minority class until classes are balanced.
+   * Increases minority class representation without losing data.
+Practical Example:
+from imblearn.over_sampling import RandomOverSampler
+ros = RandomOverSampler(random_state=42)
+X_res, y_res = ros.fit_resample(X, y)
+	   * Pros: Simple and effective for small datasets.
+   * Cons: Can cause overfitting (duplicates minority samples).
+(ii) Random Undersampling
+Theory: Randomly remove examples from the majority class to balance class distribution.
+Practical Example:
+from imblearn.under_sampling import RandomUnderSampler
+rus = RandomUnderSampler(random_state=42)
+X_res, y_res = rus.fit_resample(X, y)
+	   * Pros: Reduces training time.
+   * Cons: May lose important information from the majority class.
+(iii) SMOTE (Synthetic Minority Oversampling Technique)
+Theory:  Creates synthetic examples (not duplicates) for the minority class by interpolating between existing minority samples and their nearest neighbors.
+Practical Example:
+from imblearn.over_sampling import SMOTE
+smote = SMOTE(random_state=42)
+X_res, y_res = smote.fit_resample(X, y)
+	Pros:
+   * Reduces overfitting risk compared to random oversampling.
+   * Generates more generalized synthetic samples.
+Cons: Can create ambiguous or overlapping samples if data is noisy.
+B. Algorithmic Methods
+(i) Class Weight Adjustment
+Theory:   Assigns a higher weight to the minority class during model training, penalizing misclassifications of minority samples more heavily
+Practical Example (in Logistic Regression):
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression(class_weight='balanced', random_state=42)
+model.fit(X_train, y_train)
+	Pros:
+   * No data duplication or deletion.
+   * Works well with many algorithms (e.g., Logistic Regression, SVM, Random Forest).
+Cons: Needs proper tuning; not suitable for extremely skewed data.
+Question 5: Why is feature scaling important in ML? Compare Min-Max scaling and Standardization. 
+Hint: Explain impact on distance-based algorithms (e.g., KNN, SVM) and gradient descent. 
+
+
+Answer:  Feature scaling is important in Machine Learning because most algorithms perform better when all features are on a similar scale.
+If features have very different ranges, models can become biased toward features with larger magnitudes, leading to poor performance.
+
+
+Feature Scaling Matters
+   1. Distance-based algorithms (like KNN, SVM, K-Means):
+ These rely on Euclidean distance or similarity measures.
+      * If one feature (e.g., “income” in ₹) ranges from 0–10,00,000 and another (“age”) ranges from 0–100,
+→ the model will give more weight to income just because of its scale — not its importance.
+      * Scaling ensures all features contribute equally to distance calculations.]
+
+
+         2. Gradient Descent-based algorithms (like Linear/Logistic Regression, Neural Networks):
+         * Unscaled data → gradients oscillate and converge slowly.
+         * Scaled data → smoother, faster convergence.
+ Comparison: Min-Max Scaling vs Standardization
+Aspect
+	Min-Max Scaling (Normalization)
+	Standardization (Z-score Scaling)
+	Formula
+	x’ = x-x/ x
+	  x’=x-
+	Output Range
+	[0, 1] (or any defined range)
+	Mean = 0, Standard Deviation = 1
+	Effect
+	Compresses all values into a fixed range
+	Centers data and scales by variance
+	Sensitive To Outliers
+	Yes — outliers can distort min and max
+	Less sensitive to outliers
+	Common Use Cases
+	Image data, neural networks (where inputs are bounded)
+	Algorithms assuming normal distribution (SVM, Logistic Regression, PCA)
+	Example
+	Feature1: [10, 20, 30] → [0, 0.5, 1]
+	Feature1: [10, 20, 30] → [-1.22, 0, 1.22]
+	Question 6:  Compare Label Encoding and One-Hot Encoding. When would you prefer one over the other? 
+Hint: Consider categorical variables with ordinal vs. nominal relationships.
+
+
+Answer:   Label Encoding vs One-Hot Encoding
+Both Label Encoding and One-Hot Encoding are techniques for converting categorical data into numerical form, which is essential because ML models typically work with numbers, not text.
+1. Label Encoding
+Aspects
+	Description
+	How it Works
+	Assigns each unique category a numeric label.
+	Example
+	Color = {Red, Green, Blue} → {Red: 0, Green: 1, Blue: 2}
+	Output
+	Single integer per category (e.g., [0, 1, 2])
+	Use Case
+	Suitable for ordinal data (where order matters).
+	Problem
+	Creates an artificial ordinal relationship among categories if used for nominal data.
+For example, the model might think “Blue (2)” > “Green (1)” > “Red (0)”.
+	Algorithm that handle it well
+	Tree-based models (Decision Trees, Random Forests) — they can handle label encoding without misinterpreting order.
+	
+
+ 
+2. One-Hot Encoding
+Aspects
+	Description
+	How it works
+	Creates a new binary column for each category — 1 if present, 0 otherwise.
+	Example
+	Color = {Red, Green, Blue} →
+Red: [1, 0, 0], Green: [0, 1, 0], Blue: [0, 0, 1]
+	Output
+	Multiple columns (one per category).
+	Use Case
+	Suitable for nominal data (no natural order).
+	Problems
+	Increases dimensionality — can lead to “curse of dimensionality” with many categories.
+	Algorithm that prefer it 
+	Distance-based or linear models (KNN, Logistic Regression, SVM, Neural Networks). These require equal feature treatment without false ordering.
+	
+
+         * When to Use Which
+Scenario
+	Preferred Reasons
+	Reasons
+	Categories have natural order (e.g., “Low”, “Medium”, “High”)
+	Label Encoding
+	Preserves ranking information
+	Categories are nominal (e.g., “Red”, “Blue”, “Green”)
+	One-Hot Encoding
+	Avoids false numeric relationships
+	Dataset has many unique categories
+	Label Encoding ot Target Encoding
+	To prevent explosion in feature space
+	Using tree-based models
+	Label Encoding
+	Trees split based on values, not distances
+	Using distance/linear models
+	One-Hot Encoding
+	These models are sensitive to numeric scales
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question 7:  Google Play Store Dataset 
+a). Analyze the relationship between app categories and ratings. Which categories have the highest/lowest average ratings, and what could be the possible reasons? 
+Dataset: https://github.com/MasteriNeuron/datasets.git 
+(Include your Python code and output in the code box below.) 
+
+
+Answer:
+# 📊 Google Play Store Dataset Analysis
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+# Load dataset
+df = pd.read_csv("googleplaystore.csv")
+
+
+# Drop missing ratings
+df_clean = df.dropna(subset=["Rating"])
+
+
+# Group by category and compute average ratings
+category_rating = df_clean.groupby("Category")["Rating"].mean().sort_values(ascending=False)
+
+
+# Top 5 and Bottom 5 categories
+top5 = category_rating.head(5)
+bottom5 = category_rating.tail(5)
+
+
+print("🔹 Top 5 Categories by Average Rating:\n")
+print(top5, "\n")
+
+
+print("🔸 Bottom 5 Categories by Average Rating:\n")
+print(bottom5, "\n")
+
+
+# Plot average rating by category
+plt.figure(figsize=(12,6))
+category_rating.plot(kind='bar', color='skyblue', edgecolor='black')
+plt.title("Average App Ratings by Category", fontsize=14)
+plt.ylabel("Average Rating")
+plt.xlabel("Category")
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+	
+
+
+
+🔹 Top 5 Categories by Average Rating:
+
+
+Category
+EVENTS                                      4.435556
+EDUCATION                               4.389032
+ART_AND_DESIGN                   4.358065
+BOOKS_AND_REFERENCE     4.346067
+PARENTING                               4.310000
+Name: Rating,   dtype: float64 
+
+
+🔸 Bottom 5 Categories by Average Rating:
+
+
+Category
+LIFESTYLE                            4.094904
+VIDEO_PLAYERS                  4.063750
+MAPS_AND_NAVIGATION    4.051613
+TOOLS                                   4.047411
+DATING                                  3.970769
+Name: Rating, dtype: float64
+
+
+
+
+	
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question 8: Titanic Dataset 
+a) Compare the survival rates based on passenger class (Pclass). Which class had the highest survival rate, and why do you think that happened? 
+b) Analyze how age (Age) affected survival. Group passengers into children (Age < 18) and adults (Age ≥ 18). Did children have a better chance of survival? 
+Dataset: https://github.com/MasteriNeuron/datasets.git 
+(Include your Python code and output in the code box below.) 
+
+
+Answer:  
+import pandas as pd
+import numpy as np
+
+
+# Load the dataset
+df = pd.read_csv('titanic.csv')
+
+
+print("--- Initial Data Inspection ---")
+print(df.head())
+print("\n--- Data Information ---")
+print(df.info())
+
+
+# --------------------------------------------------------------------------
+# Part a) Compare the survival rates based on passenger class (Pclass).
+# --------------------------------------------------------------------------
+
+
+# Calculate survival rate (mean of 'Survived') for each passenger class
+pclass_survival_rate = df.groupby('Pclass')['Survived'].mean().sort_values(ascending=False)
+
+
+print("\n--- Part a) Survival Rates by Passenger Class ---")
+print(pclass_survival_rate)
+
+
+# --------------------------------------------------------------------------
+# Part b) Analyze how age (Age) affected survival.
+# --------------------------------------------------------------------------
+
+
+# Check for missing 'Age' values
+print(f"\nMissing 'Age' values before imputation: {df['Age'].isnull().sum()}")
+
+
+# Fill missing 'Age' values with the median for a robust estimate
+median_age = df['Age'].median()
+df['Age'].fillna(median_age, inplace=True)
+
+
+# Create 'AgeGroup' column: Child (< 18) and Adult (>= 18)
+df['AgeGroup'] = np.where(df['Age'] < 18, 'Child', 'Adult')
+
+
+# Calculate survival rate for each age group
+age_group_survival_rate = df.groupby('AgeGroup')['Survived'].mean().sort_values(ascending=False)
+
+
+print("\n--- Part b) Survival Rates by Age Group (Missing Age Imputed with Median) ---")
+print(age_group_survival_rate)
+
+
+	
+
+
+
+--- Initial Data Inspection ---
+   PassengerId  Survived  Pclass  \
+0            1         0       3   
+1            2         1       1   
+2            3         1       3   
+3            4         1       1   
+4            5         0       3   
+
+
+                                              Name     Sex   Age  SibSp  \
+0                            Braund, Mr. Owen Harris    male  22.0      1   
+1  Cumings, Mrs. John Bradley (Florence Briggs Th...  female  38.0      1   
+2                             Heikkinen, Miss. Laina  female  26.0      0   
+3       Futrelle, Mrs. Jacques Heath (Lily May Peel)  female  35.0      1   
+4                           Allen, Mr. William Henry    male  35.0      0   
+
+
+   Parch            Ticket     Fare Cabin Embarked  
+0      0         A/5 21171   7.2500   NaN        S  
+1      0          PC 17599  71.2833   C85        C  
+2      0  STON/O2. 3101282   7.9250   NaN        S  
+3      0            113803  53.1000  C123        S  
+4      0            373450   8.0500   NaN        S  
+
+
+--- Data Information ---
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 891 entries, 0 to 890
+Data columns (total 12 columns):
+ #   Column       Non-Null Count  Dtype  
+---  ------       --------------  -----  
+ 0   PassengerId  891 non-null    int64  
+ 1   Survived     891 non-null    int64  
+ 2   Pclass       891 non-null    int64  
+ 3   Name         891 non-null    object 
+ 4   Sex          891 non-null    object 
+ 5   Age          714 non-null    float64
+ 6   SibSp        891 non-null    int64  
+ 7   Parch        891 non-null    int64  
+ 8   Ticket       891 non-null    object 
+ 9   Fare         891 non-null    float64
+ 10  Cabin        204 non-null    object 
+ 11  Embarked     889 non-null    object 
+dtypes: float64(2), int64(5), object(5)
+memory usage: 83.7+ KB
+None
+
+
+--- Part a) Survival Rates by Passenger Class ---
+Pclass
+1    0.629630
+2    0.472826
+3    0.242363
+Name: Survived, dtype: float64
+
+
+Missing 'Age' values before imputation: 177
+
+
+--- Part b) Survival Rates by Age Group (Missing Age Imputed with Median) ---
+AgeGroup
+Child    0.539823
+Adult    0.361183
+Name: Survived, dtype: float64
+/tmp/ipython-input-3763526610.py:31: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.
+The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.
+
+
+For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.
+
+
+
+
+  df['Age'].fillna(median_age, inplace=True)
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question 9: Flight Price Prediction Dataset 
+a) How do flight prices vary with the days left until departure? Identify any exponential price surges and recommend the best booking window. 
+b)Compare prices across airlines for the same route (e.g., Delhi-Mumbai). Which airlines are consistently cheaper/premium, and why? 
+Dataset: https://github.com/MasteriNeuron/datasets.git 
+(Include your Python code and output in the code box below.) 
+Answer:  
+
+
+
+
+import pandas as pd
+
+
+# Load the dataset
+df = pd.read_csv('https://raw.githubusercontent.com/MasteriNeuron/datasets/main/flight_price.csv')
+
+
+# Display the first few rows and information
+print("--- Initial Data Inspection ---")
+display(df.head())
+print("\n--- Data Information ---")
+df.info()
+
+
+	
+
+--- Initial Data Inspection ---
+
+
+
+
+	Unnamed: 0
+	airline
+	flight
+	source_city
+	departure_time
+	stops
+	arrival_time
+	destination_city
+	class
+	duration
+	days_left
+	price
+	0
+	0
+	SpiceJet
+	SG-8709
+	Delhi
+	Evening
+	zero
+	Night
+	Mumbai
+	Economy
+	2.17
+	1
+	5953
+	1
+	1
+	SpiceJet
+	SG-8157
+	Delhi
+	Early_Morning
+	zero
+	Morning
+	Mumbai
+	Economy
+	2.33
+	1
+	5953
+	2
+	2
+	AirAsia
+	I5-764
+	Delhi
+	Early_Morning
+	zero
+	Early_Morning
+	Mumbai
+	Economy
+	2.17
+	1
+	5956
+	3
+	3
+	Vistara
+	UK-995
+	Delhi
+	Morning
+	zero
+	Afternoon
+	Mumbai
+	Economy
+	2.25
+	1
+	5955
+	4
+	4
+	Vistara
+	UK-963
+	Delhi
+	Morning
+	zero
+	Morning
+	Mumbai
+	Economy
+	2.33
+	1
+	5955
+	--- Data Information ---
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 300153 entries, 0 to 300152
+Data columns (total 12 columns):
+ #   Column            Non-Null Count   Dtype  
+---  ------            --------------   -----  
+ 0   Unnamed: 0        300153 non-null  int64  
+ 1   airline           300153 non-null  object 
+ 2   flight            300153 non-null  object 
+ 3   source_city       300153 non-null  object 
+ 4   departure_time    300153 non-null  object 
+ 5   stops             300153 non-null  object 
+ 6   arrival_time      300153 non-null  object 
+ 7   destination_city  300153 non-null  object 
+ 8   class             300153 non-null  object 
+ 9   duration          300153 non-null  float64
+ 10  days_left         300153 non-null  int64  
+ 11  price             300153 non-null  int64  
+dtypes: float64(1), int64(3), object(8)
+memory usage: 27.5+ MB
+	
+
+         1. Analyze price variation with days left until departure
+Subtask: Analyze how flight prices vary with the number of days left until departure, identify potential exponential price surges as the departure date approaches, and recommend an optimal booking window based on the observed trends.
+Reasoning: Calculate the average price for each number of days left until departure, sort the results, store them in a DataFrame, and print the DataFrame.
+
+
+# Calculate the average price for each number of days left until departure
+price_by_days_left = df.groupby('days_left')['price'].mean().reset_index()
+
+
+# Sort the results by the number of days left until departure in ascending order
+price_by_days_left = price_by_days_left.sort_values(by='days_left', ascending=True)
+
+
+# Store the results in a new DataFrame (already done by reset_index)
+# The DataFrame is named 'price_by_days_left'
+
+
+# Print the resulting DataFrame
+print("--- Average Price by Days Left Until Departure ---")
+display(price_by_days_left)
+
+
+	
+
+--- Average Price by Days Left Until Departure ---
+
+
+
+
+	days_left
+	price
+	0
+	1
+	21591.867151
+	1
+	2
+	30211.299801
+	2
+	3
+	28976.083569
+	3
+	4
+	25730.905653
+	4
+	5
+	26679.773368
+	5
+	6
+	24856.493902
+	6
+	7
+	25588.367351
+	7
+	8
+	24895.883995
+	8
+	9
+	25726.246072
+	9
+	10
+	25572.819134
+	10
+	11
+	22990.656070
+	11
+	12
+	22505.803322
+	12
+	13
+	22498.885384
+	13
+	14
+	22678.002363
+	14
+	15
+	21952.540852
+	15
+	16
+	20503.546237
+	16
+	17
+	20386.353949
+	17
+	18
+	19987.445168
+	18
+	19
+	19507.677375
+	19
+	20
+	19699.983390
+	20
+	21
+	19430.494058
+	21
+	22
+	19590.667385
+	22
+	23
+	19840.913451
+	23
+	24
+	19803.908896
+	24
+	25
+	19571.641791
+	25
+	26
+	19238.290278
+	26
+	27
+	19950.866195
+	27
+	28
+	19534.986047
+	28
+	29
+	19744.653119
+	29
+	30
+	19567.580834
+	30
+	31
+	19392.706612
+	31
+	32
+	19258.135308
+	32
+	33
+	19306.271739
+	33
+	34
+	19562.008266
+	34
+	35
+	19255.652996
+	35
+	36
+	19517.688444
+	36
+	37
+	19506.306516
+	37
+	38
+	19734.912316
+	38
+	39
+	19262.095556
+	39
+	40
+	19144.972439
+	40
+	41
+	19347.440460
+	41
+	42
+	19154.261659
+	42
+	43
+	19340.528894
+	43
+	44
+	19049.080174
+	44
+	45
+	19199.876307
+	45
+	46
+	19305.351623
+	46
+	47
+	18553.272038
+	47
+	48
+	18998.126851
+	48
+	49
+	18992.971888
+	Distributions
+  
+
+  
+
+
+
+	
+
+         * Reasoning:
+Visualize the average price trend as days left until departure decreases to identify potential exponential price surges and recommend an optimal booking window.
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+# Plot the average price by days left
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=price_by_days_left, x='days_left', y='price')
+plt.title('Average Flight Price vs. Days Left Until Departure')
+plt.xlabel('Days Left Until Departure')
+plt.ylabel('Average Price')
+plt.gca().invert_xaxis() # Invert x-axis to show approaching departure date from left to right
+plt.grid(True)
+plt.show()
+
+
+# Analyze the trend to recommend an optimal booking window
+# Observe the plot for the lowest price range and the point where prices start to increase significantly.
+print("\n--- Analysis and Recommendation ---")
+print("Observing the plot, we can see that the average price tends to be lower when booking further in advance.")
+print("There appears to be a noticeable increase in average price as the departure date gets closer, particularly within the last few days.")
+print("Based on this trend, an optimal booking window appears to be when there are more than 15-20 days left until departure, as prices start to show an upward trend within this range.")
+print("The most significant surge seems to occur in the last few days (e.g., less than 7 days).")
+
+
+	
+
+  
+
+--- Analysis and Recommendation ---
+Observing the plot, we can see that the average price tends to be lower when booking further in advance.
+There appears to be a noticeable increase in average price as the departure date gets closer, particularly within the last few days.
+Based on this trend, an optimal booking window appears to be when there are more than 15-20 days left until departure, as prices start to show an upward trend within this range.
+The most significant s
+	
+
+
+
+b. Compare prices across airlines for a specific route
+Subtask: Filter the data to focus on the Delhi-Mumbai route, group the data by airline, calculate the average price for this route, identify consistently cheaper or more premium airlines, and explore possible reasons for price differences.
+Reasoning: Filter the DataFrame to focus on the Delhi-Mumbai route and then group by airline to calculate the average price.
+
+
+# Filter the DataFrame for the Delhi-Mumbai route
+df_delhi_mumbai = df[(df['source_city'] == 'Delhi') & (df['destination_city'] == 'Mumbai')].copy()
+
+
+# Group by airline and calculate the mean price
+airline_price_delhi_mumbai = df_delhi_mumbai.groupby('airline')['price'].mean().sort_values()
+
+
+# Print the results
+print("\n--- Average Price by Airline for Delhi-Mumbai Route ---")
+display(airline_price_delhi_mumbai)
+
+
+# Analyze and discuss potential reasons
+print("\n--- Analysis of Price Differences ---")
+print("Based on the average prices for the Delhi-Mumbai route:")
+print("- Consistently Cheaper Airline(s): SpiceJet, AirAsia, IndiGo generally offer lower average prices.")
+print("- Consistently Premium Airline(s): Vistara and Air India tend to have higher average prices.")
+print("\nPotential reasons for these price differences could include:")
+print("- **Service Class:** Vistara and Air India offer Business Class, which significantly increases the average price compared to airlines that primarily operate Economy (SpiceJet, AirAsia, IndiGo).")
+print("- **Reputation and Service Quality:** Airlines perceived as more premium (like Vistara and Air India) may command higher prices due to service quality, amenities, or brand perception.")
+print("- **Operational Costs and Network:** Differences in operational efficiency, fleet type, and network size could also contribute to price variations.")
+print("- **Target Market:** Airlines might target different segments of the market, leading to varied pricing strategies.")
+print("\nNote: The dataset provides limited information to definitively prove these reasons, but they are common factors influencing airline pricing.")
+
+
+	
+
+
+
+--- Average Price by Airline for Delhi-Mumbai Route ---
+
+
+
+
+	
+
+	airline
+	Price
+	AirAsia
+	3981.191456
+	Indigo
+	4473.739130
+	SpiceJet
+	4628.251984
+	GO_FIRST
+	5762.211515
+	Air_India
+	23695.916916
+	Vistara
+	26630.293322\
+
+
+	dtype: float64
+
+
+--- Analysis of Price Differences ---
+Based on the average prices for the Delhi-Mumbai route:
+- Consistently Cheaper Airline(s): SpiceJet, AirAsia, IndiGo generally offer lower average prices.
+- Consistently Premium Airline(s): Vistara and Air India tend to have higher average prices.
+
+
+Potential reasons for these price differences could include:
+- **Service Class:** Vistara and Air India offer Business Class, which significantly increases the average price compared to airlines that primarily operate Economy (SpiceJet, AirAsia, IndiGo).
+- **Reputation and Service Quality:** Airlines perceived as more premium (like Vistara and Air India) may command higher prices due to service quality, amenities, or brand perception.
+- **Operational Costs and Network:** Differences in operational efficiency, fleet type, and network size could also contribute to price variations.
+- **Target Market:** Airlines might target different segments of the market, leading to varied pricing strategies.
+
+
+Note: The dataset provides limited information to definitively prove these reasons, but they are common factors influencing airline pricing.
+	
+
+
+
+ Present the findings
+Subtask: Summarize the analysis regarding price variation with days left until departure and the comparison of prices across airlines for the Delhi-Mumbai route.
+Reasoning: Summarize the findings from the previous analyses on price variation with days left and airline price comparison for the Delhi-Mumbai route, combining them into a concise summary.
+
+
+# Summarize the analysis of price variation with days left until departure
+print("--- Summary of Price Variation with Days Left ---")
+print("Analysis of flight prices based on days left until departure shows a clear trend: prices tend to be lower when booking further in advance.")
+print("As the departure date approaches, average prices increase, with a more significant surge observed within the last 15-20 days and particularly in the final few days (less than 7 days).")
+print("Based on this, the optimal booking window appears to be more than 15-20 days before departure to potentially avoid higher prices.")
+
+
+# Summarize the analysis of airline price comparison for the Delhi-Mumbai route
+print("\n--- Summary of Airline Price Comparison for Delhi-Mumbai Route ---")
+print("Comparing average flight prices across airlines for the Delhi-Mumbai route reveals significant differences.")
+print(f"Consistently cheaper airlines on this route include AirAsia (avg price: ₹{airline_price_delhi_mumbai['AirAsia']:.2f}), IndiGo (avg price: ₹{airline_price_delhi_mumbai['Indigo']:.2f}), and SpiceJet (avg price: ₹{airline_price_delhi_mumbai['SpiceJet']:.2f}).")
+print(f"Consistently premium airlines with notably higher average prices are Air India (avg price: ₹{airline_price_delhi_mumbai['Air_India']:.2f}) and Vistara (avg price: ₹{airline_price_delhi_mumbai['Vistara']:.2f}).")
+
+
+# Briefly reiterate potential reasons for price differences
+print("\nPotential reasons for these price differences include:")
+print("- The availability of different service classes (e.g., Business Class offered by premium airlines like Vistara and Air India).")
+print("- Differences in airline reputation, service quality, and amenities.")
+print("- Variations in operational costs, fleet types, and network strategies.")
+print("- Different target markets and pricing strategies employed by airlines.")
+
+
+print("\n--- Overall Summary ---")
+print("In summary, booking flights well in advance (more than 15-20 days) generally results in lower prices, while prices tend to increase as the departure date nears, especially in the final week.")
+print("For the Delhi-Mumbai route, there's a clear distinction between consistently cheaper airlines (AirAsia, IndiGo, SpiceJet) and premium airlines (Air India, Vistara), likely influenced by factors such as service class offerings and perceived service quality.")
+	
+
+--- Summary of Price Variation with Days Left ---
+Analysis of flight prices based on days left until departure shows a clear trend: prices tend to be lower when booking further in advance.
+As the departure date approaches, average prices increase, with a more significant surge observed within the last 15-20 days and particularly in the final few days (less than 7 days).
+Based on this, the optimal booking window appears to be more than 15-20 days before departure to potentially avoid higher prices.
+
+
+--- Summary of Airline Price Comparison for Delhi-Mumbai Route ---
+Comparing average flight prices across airlines for the Delhi-Mumbai route reveals significant differences.
+Consistently cheaper airlines on this route include AirAsia (avg price: ₹3981.19), IndiGo (avg price: ₹4473.74), and SpiceJet (avg price: ₹4628.25).
+Consistently premium airlines with notably higher average prices are Air India (avg price: ₹23695.92) and Vistara (avg price: ₹26630.29).
+
+
+Potential reasons for these price differences include:
+- The availability of different service classes (e.g., Business Class offered by premium airlines like Vistara and Air India).
+- Differences in airline reputation, service quality, and amenities.
+- Variations in operational costs, fleet types, and network strategies.
+- Different target markets and pricing strategies employed by airlines.
+
+
+--- Overall Summary ---
+In summary, booking flights well in advance (more than 15-20 days) generally results in lower prices, while prices tend to increase as the departure date nears, especially in the final week.
+For the Delhi-Mumbai route, there's a clear distinction between consistently cheaper airlines (AirAsia, IndiGo, SpiceJet) and premium airlines (Air India, Vistara), likely influenced by factors such as service class offerings and perceived service quality.
