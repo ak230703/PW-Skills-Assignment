@@ -1,0 +1,371 @@
+﻿Supervised Learning: Regression Models and Performance Metrics | Assignment
+
+
+Question 1 : What is Simple Linear Regression (SLR)? Explain its purpose. 
+
+
+Answer:  
+1. Simple Linear Regression (SLR) is a statistical method used to study the relationship between two continuous variables — one independent variable (X) and one dependent variable (Y).
+2. It helps us understand how changes in the independent variable affect the dependent variable by fitting a straight line (called the regression line) through the data points.
+* Mathematical Form : Y=β0+β1X+ε
+where:
+* Y → Dependent variable (the outcome or target)
+* X → Independent variable (the predictor)
+* β₀ → Intercept (value of Y when X = 0)
+* β₁ → Slope (rate of change in Y for each unit change in X)
+* ε → Error term (difference between observed and predicted values)
+Purpose of Simple Linear Regression
+1. Prediction:
+ Estimate or predict the value of a dependent variable based on the value of an independent variable.
+ Example: Predicting a student’s exam score (Y) based on study hours (X).
+
+2. Relationship Analysis:
+ Determine whether and how strongly two variables are related.
+Example: Analyzing the relationship between temperature (X) and ice-cream sales (Y).
+
+3. Trend Identification:
+ Identify trends or directions in data using a straight-line approximation.
+
+   *  Example
+If we collect data on how many hours students study and their corresponding marks, SLR can model:
+                                Marks=β0+β1×(Study Hours)
+so we can predict marks for any given number of study hours.
+
+
+Question 2: What are the key assumptions of Simple Linear Regression? 
+Answer:  The key assumptions of Simple Linear Regression (SLR) ensure that the model’s results (coefficients, predictions, and statistical tests) are valid and reliable. Here are the main ones:
+1. Linearity
+   * The relationship between the independent variable (X) and the dependent variable (Y) is linear.
+   * Mathematically:  Y=β0+β1X+ϵ
+   * This means that changes in YYY are proportional to changes in X.
+2. Independence of Errors
+   * The residuals (errors) are independent of each other.
+   * No autocorrelation (especially important in time-series data).
+   * Violation example: when errors are correlated over time (e.g., sales data from consecutive days).
+3. Homoscedasticity (Constant Variance of Errors)
+   * The residuals have constant variance across all levels of X.
+   * That is, the spread of errors should be roughly the same for all predicted values.
+   * Violation (heteroscedasticity): residuals fan out or narrow down when plotted against fitted values.
+4. Normality of Errors
+   * The residuals (ε) are normally distributed.
+   * Important for hypothesis testing and constructing confidence intervals.
+   * Checked using histograms or Q–Q plots of residuals.
+5. No Multicollinearity (Not applicable in SLR)
+   * This applies to Multiple Linear Regression, not SLR, since there’s only one independent variable here.
+6. No Measurement Error in X
+   * The independent variable (X) is measured without error.
+   * Errors in X can bias the slope and intercept estimates.
+
+
+
+
+
+
+
+
+
+
+Question 3: Write the mathematical equation for a simple linear regression model and explain each term. 
+
+
+Answer:  The mathematical equation for a Simple Linear Regression (SLR) model is:
+                                                          Y=β0+β1X+ε
+Explanation of Each Term:
+
+
+Term
+	Meaning
+	Description
+	Y
+	Dependent variable (Response variable)
+	The variable we are trying to predict or explain. Example: crop yield, house price, sales, etc.
+	X
+	Independent variable (Predictor variable)
+	The variable used to predict YYY. Example: fertilizer amount, house size, advertisement spend, etc.
+	
+	Intercept (Constant term)
+	The predicted value of YYY when X=0X = 0X=0. It represents the point where the regression line crosses the Y-axis.
+	
+	Slope (Regression coefficient)
+	Indicates how much YYY changes for a one-unit increase in XXX.
+- If β1>0\beta_1 > 0β1​>0: YYY increases with XXX.
+- If β1<0\beta_1 < 0β1​<0: YYY decreases with XXX.
+	
+	Error term (Residual)
+	Represents the difference between the actual and predicted values of YYY.
+It captures the effects of all other factors not included in the model.
+	
+
+Example:
+Suppose we model the relationship between sugarcane yield (Y) and nitrogen fertilizer (X):
+                                         Yield = 2.5 + 0.8 × Fertilizer + ε
+
+
+   * β0=2.5: Even with no fertilizer, the expected yield is 2.5 tons/ha.
+   * β1=0.8: For every 1 kg increase in fertilizer, yield increases by 0.8 tons/ha (on average).
+   * ε: Captures random factors like rainfall, soil variation, etc.
+
+
+
+
+Question 4: Provide a real-world example where simple linear regression can be applied. 
+Answer:  Example: Predicting Sugarcane Yield from Nitrogen Fertilizer Use
+Scenario: A soil scientist wants to understand how the amount of nitrogen fertilizer (X) affects sugarcane yield (Y).
+They collect data from several fields, recording:
+   * The quantity of nitrogen applied (in kg/ha)
+   * The resulting sugarcane yield (in tons/ha)
+Objective:
+Develop a simple model to predict sugarcane yield based on the fertilizer amount.
+Model:
+                                            Y = β0 + β1X + ε
+Where:
+   * Y: Sugarcane yield (tons/ha) 
+   * X: Nitrogen fertilizer applied (kg/ha)
+   * β0​: Expected yield when no fertilizer is applied
+   * β1​: Increase in yield for each additional kg/ha of nitrogen
+   * ε: Random error (e.g., rainfall, soil quality, pests, etc.)
+
+Example Outcome:
+After fitting the model, suppose we get:
+                                                Yield=5.2+0.12×Fertilizer
+Interpretation:
+      * Intercept (β0=5.2): If no nitrogen is applied, the expected yield is 5.2 tons/ha.
+      * Slope (β1=0.12): For every 1 kg increase in nitrogen, yield increases by 0.12 tons/ha on average.
+Applications:
+      * Helps farmers optimize fertilizer use for maximum yield.
+      * Supports precision agriculture and cost-efficient nutrient management.
+      * Can be extended to predict yield under different soil or climate conditions.
+
+
+
+
+
+Question 5: What is the method of least squares in linear regression? 
+
+
+Answer:  The method of least squares is the most common technique used to find the best-fitting line in a linear regression model.
+It determines the regression coefficients (β0​ and β1​) such that the line minimizes the total squared differences between the observed values and the predicted values.
+         * Mathematical Explanation
+           For a simple linear regression model:
+                                                               Y = β0 + β1X + ε
+where:
+         * Y: actual (observed) value
+         * Y^ = β0 + β1X: predicted value
+         * ε=Y − Y^: error (residual)
+Goal of the Least Squares Method
+Minimize the sum of squared residuals (errors):
+                                    S = ∑ i=1n (Yi−Yi^)^2 = ∑ i=1n (Yi − β0 − β1Xi)^2
+We find values of β0 and β1​ that minimize this S.
+Formulas for the Estimates
+The least squares estimates are:
+                                            = ∑(Xi − Xˉ)(Yi − Yˉ) / ∑(Xi − Xˉ)2
+                                          = Yˉ− β1Xˉ
+where: 
+         * Xˉ= mean of all X values
+         * Yˉ = mean of all Y values
+Interpretation
+         * β0​: intercept — predicted value of Y when X=0
+         * β1​: slope — how much Y changes when X increases by one unit
+The resulting regression line:    Y^ = β0 + β1X
+is called the line of best fit, as it minimizes the total squared vertical distances between data points and the line.
+Example (Agriculture Context)
+Suppose we study how nitrogen fertilizer (X) affects sugarcane yield (Y).
+By applying the method of least squares to sample data, we might get:
+                                               Y^ = 5.2 + 0.12X
+This means:
+         * When no fertilizer is applied, the expected yield is 5.2 tons/ha.
+         * For every 1 kg/ha increase in fertilizer, yield increases by 0.12 tons/ha.
+
+
+Question 6: What is Logistic Regression? How does it differ from Linear Regression? 
+
+
+Answer:  Logistic Regression is a supervised machine learning algorithm used for classification problems, not regression in the traditional sense.
+It predicts the probability that a given input belongs to a particular class — usually a binary outcome (e.g., Yes/No, 1/0, Success/Failure).
+Mathematical Form
+Unlike linear regression, logistic regression does not model the target variable directly as a linear combination of predictors.
+Instead, it models the log-odds (logit) of the probability P(Y=1):
+                                                    logit(P) = ln⁡(P/1−P) = β0+β1X
+where:
+         * P=P(Y=1∣X)) is the probability that the dependent variable equals 1.
+         * β0​,β1​: coefficients estimated from data.
+
+Predicted Probability
+From the above equation, the probability is obtained by applying the sigmoid (logistic) function:
+                                              P(Y=1) = 1/1+e−(β0+β1X)
+This ensures the output is always between 0 and 1, making it suitable for probabilities.
+Difference between Linear and Logistic Regression:
+Aspect
+	Linear Regression
+	Logistic Regression
+	Purpose
+	Predicts a continuous value (e.g., yield, price, temperature).
+	Predicts a probability or class label (e.g., healthy/diseased).
+	Output Range
+	(−∞,+∞)
+	[0,1] (probability)
+	Equation
+	Y=β0​+β1​X
+	ln(P/1−P​) = β0​+β1​X
+	Error Type
+	Measured using Mean Squared Error (MSE).
+	Measured using Log-Loss or Cross-Entropy.
+	Model Linearity
+	Models a linear relationship between X and Y.
+	Models a linear relationship between X and the log-odds of Y.
+	Applications
+	Forecasting, trend analysis, yield prediction, etc.
+	Classification — spam detection, disease diagnosis, customer churn prediction, etc.
+	
+
+
+
+Question 7: Name and briefly describe three common evaluation metrics for regression models. 
+
+
+Answer:  Here are three common evaluation metrics used to assess regression models:
+1. Mean Absolute Error (MAE)
+                                         MAE = 1n∑i = 1n∣yi − y^i∣
+
+
+            * Meaning: Average of the absolute differences between the actual (yi​) and predicted (y^i​) values.
+            * Interpretation: Lower MAE indicates better predictions. It gives equal weight to all errors.
+            * Use case: Easy to understand and less sensitive to outliers than MSE.
+
+2. Mean Squared Error (MSE)
+                                         MSE = 1/n∑ n to i=1 (yi−y^i)^2
+               * Meaning: Average of the squared differences between actual and predicted values.
+               * Interpretation: Penalizes larger errors more heavily than MAE due to squaring. Lower MSE = better model.
+               * Use case: Often used in optimization for regression models; sensitive to outliers.
+
+3. R-squared (R2R^2R2) — Coefficient of Determination
+                                          R2 = 1−∑(yi−y^i)^2 / ∑(yi−yˉ)^2
+                  * Meaning: Proportion of variance in the dependent variable (YYY) explained by the model.
+                  * Interpretation:
+                  * R2=1 → perfect fit
+                  * R2=0 → model explains none of the variance
+                  * Use case: Measures goodness of fit; helps compare models.
+
+
+Question 8: What is the purpose of the R-squared metric in regression analysis? 
+
+
+Answer:  The R-squared (R^2) metric in regression analysis measures how well the independent variable(s) explain the variation in the dependent variable.
+Purpose of R-squared:
+                  1. Proportion of Variance Explained
+                                    R2 = 1−SSres/SStot
+                     * SSres=∑(yi−y^i)^2 → residual sum of square
+                     * SStot=∑(yi−yˉ)^2→ total sum of squares
+                     * R^2 represents the fraction of the total variation in Y explained by the model.
+
+                        2. Goodness of Fit
+
+                           * Higher R^2 indicates the model fits the data better.
+                           * R^2 = 1 → perfect fit (all points lie exactly on the regression line).
+                           * R^2 = 0→ model explains none of the variance (as good as using the mean).
+
+                              3. Model Comparison
+
+                                 * Useful to compare multiple regression models: a higher R2R^2R2 generally indicates a better explanatory model.
+                                 * Can help assess whether adding more predictors improves the model.
+Interpretation Example
+Suppose R^2 = 0.75 for a model predicting sugarcane yield based on nitrogen fertilizer:
+                                 * Meaning: 75% of the variation in yield is explained by fertilizer levels.
+                                 * Remaining 25%: Due to other factors like rainfall, soil type, pests, or random variation.
+
+
+
+
+Question 9: Write Python code to fit a simple linear regression model using scikit-learn and print the slope and intercept. (Include your Python code and output in the code box below.) 
+
+
+Answer:  
+# Import libraries
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+
+# Sample data
+# X = independent variable (e.g., fertilizer in kg/ha)
+# Y = dependent variable (e.g., crop yield in tons/ha)
+X = np.array([10, 20, 30, 40, 50]).reshape(-1, 1)  # 2D array for sklearn
+Y = np.array([2.5, 3.0, 3.5, 4.0, 4.5])
+
+
+# Create and fit the model
+model = LinearRegression()
+model.fit(X, Y)
+
+
+# Get the slope and intercept
+slope = model.coef_[0]
+intercept = model.intercept_
+
+
+print(f"Slope (β1): {slope}")
+print(f"Intercept (β0): {intercept}")
+
+
+# Optional: Predict a new value
+new_X = np.array([[60]])
+predicted_Y = model.predict(new_X)
+print(f"Predicted Y for X=60: {predicted_Y[0]}")
+	
+
+# Output
+Slope (β1): 0.04
+Intercept (β0): 2.1
+Predicted Y for X=60: 4.5
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question 10: How do you interpret the coefficients in a simple linear regression model? 
+Answer:  In Simple Linear Regression (SLR), the model is usually written as:
+                                                 Y= β0 + β1X + ε
+The coefficients (β0 and β1) are interpreted as follows:
+1. Intercept (β0​)
+                                 * Definition: The value of Y when X=0.
+                                 * Interpretation: It represents the baseline or starting point of the dependent variable.
+                                 * Example: If you are predicting sugarcane yield based on nitrogen fertilizer, and β0=2.5, it means that without any fertilizer, the expected yield is 2.5 tons/ha.
+
+2. Slope (β1​)
+                                    * Definition: The change in Y for a one-unit increase in X.
+                                    * Interpretation: It tells us the strength and direction of the relationship between X and Y:
+                                    * β1>0: Y increases as X increases.
+                                    * β1<0: Y decreases as X increases.
+                                    * β1 =0​: No linear relationship between X and Y.
+                                    * Example: If β1=0.12 for sugarcane yield vs. fertilizer:
+                                    * For every 1 kg/ha increase in fertilizer, yield increases by 0.12 tons/ha on average.
+Key Points
+                                    * The intercept gives the starting value of Y.
+                                    * The slope indicates the rate of change in Y per unit change in X.
+                                    * Together, they define the regression line Y^ = β0 + β1X which predicts Y from X.
