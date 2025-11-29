@@ -1,0 +1,285 @@
+﻿Supervised Learning: Regression Models and Performance Metrics | Assignment
+
+
+Question 1 : What is Simple Linear Regression (SLR)? Explain its purpose. 
+Answer:  Simple Linear Regression (SLR) is a basic statistical method used to model the relationship between one independent variable (X) and one dependent variable (Y).
+It assumes that this relationship can be represented by a straight line:
+                                         Y = β0 + β1X
+Where,
+* β₀ = intercept (value of Y when X = 0)
+* β₁ = slope (change in Y for a one-unit change in X)
+Purpose of Simple Linear Regression
+SLR helps in two main tasks:
+1. Prediction
+It is used to predict the value of Y (output) based on a known value of X.
+* Example: Predicting crop yield (Y) from rainfall (X).
+* Example: Predicting soil nitrogen level (Y) using soil moisture (X).
+2. Understanding relationships
+SLR quantifies the strength and direction of the relationship between X and Y.
+* If β₁ > 0 → Positive relationship (Y increases when X increases)
+* If β₁ < 0 → Negative relationship (Y decreases when X increases)
+* If β₁ = 0 → No linear relationship
+Example
+If we analyze the relationship between study hours (X) and exam marks (Y):
+* SLR tells us how much marks increase for each extra hour of study.
+* The fitted line can be used to predict future exam marks.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question 2: What are the key assumptions of Simple Linear Regression? 
+Answer:  Simple Linear Regression (SLR) is based on several key assumptions. These ensure that the model’s estimates are reliable, unbiased, and valid.
+Below are the 5 core assumptions of SLR:
+1. Linearity
+The relationship between X (independent variable) and Y (dependent variable) must be linear.
+   * Y should change in a straight-line pattern as X changes.
+   * If the relationship is curved, SLR will not fit well.
+   * Example: Crop yield increases roughly linearly with nitrogen level (up to a point).
+2. Independence of Errors
+The residuals (errors) must be independent of each other.
+   * No pattern or correlation should exist between error terms.
+   * Time-series or spatial data often violate this (autocorrelation).
+   * Example: Daily temperature readings are usually autocorrelated.
+3. Homoscedasticity (Constant Variance of Errors)
+The residuals should have constant variance at all levels of X.
+   * The spread of errors should be equal.
+   * If errors increase with X → heteroscedasticity, which is a violation.
+   * Example: Prediction errors grow larger at higher fertilizer levels.
+4. Normality of Errors
+The residuals should follow a normal distribution.
+   * This is mainly needed for valid hypothesis testing and confidence intervals.
+Example: Residuals should form a bell-shaped curve when plotted.
+5. No Perfect Multicollinearity
+In SLR, this is automatically satisfied because there is only one independent variable.(For multiple regression, this becomes important.)
+
+
+
+
+
+
+
+
+
+
+
+
+Question 3: Write the mathematical equation for a simple linear regression model and explain each term. 
+Answer:  The mathematical equation for a Simple Linear Regression (SLR) model is:
+                                                      Y^=β0+β1X
+Here’s what each term means:
+1. Y^ — Predicted value of Y
+      * This is the estimated output from the regression model.
+      * It represents the predicted dependent variable for a given X.
+2. X — Independent variable (predictor)
+      * This is the variable used to explain or predict Y.
+      * In SLR, there is only one predictor.
+3. β0 — Intercept
+      * Also called the constant term.
+      * It is the value of Y^ when X = 0.
+      * Graphically, it is the point where the regression line crosses the Y-axis.
+4. β1 — Slope coefficient
+      * Represents the rate of change in Y for a one-unit increase in X.
+      * If:
+      * β1>0 → positive relationship
+      * β1<0 → negative relationship
+      * β1=0 → no linear relationship
+5. Error term (ε) — In the full model
+The complete model includes the error term:
+                                                                Y = β0 + β1X + ε
+Where
+      * ε (epsilon) captures random variation, noise, or unobserved factors not included in the model.
+
+
+
+
+
+
+
+
+
+
+
+
+Question 4: Provide a real-world example where simple linear regression can be applied. 
+Answer:  Example: Predicting House Prices from Size
+Problem
+      * Goal: Predict house price (Y) from house size (X in sq.ft).
+      * Model:       Y=β0+β1X+ε
+      * where β1 = price change per sq.ft, β0 = base price, ε = error.
+Interpretation (Example Numbers)
+      * β^0=₹100,000, β^1=₹3,500
+      * For a 1,200 sq.ft house:
+                     Y^=100,000+3,500×1,200=₹4,300,000
+      * Meaning: Each additional sq.ft increases price by ₹3,500.
+Uses
+         * Predict prices for new houses
+         * Understand effect of size on price
+         * Baseline for more complex models including location, bedrooms, etc.
+Key Notes
+         * Check assumptions: linearity, constant variance, normal residuals
+         * SLR works best when size is the main factor; otherwise, consider multiple regression.
+
+
+
+
+Question 5: What is the method of least squares in linear regression? 
+Answer:  The Method of Least Squares is the most common technique used to estimate the parameters (β0 and β1​) in linear regression.
+
+
+Idea
+         * In a dataset with points (xi,yi), the regression line predicts y^i=β0+β1xi
+         * There will usually be errors (residuals) ei=yi−y^
+         * The least squares method finds the line that minimizes the sum of the squared residuals:
+Minimize S(β0,β1) = ∑i=1,n(yi − y^i)2 = ∑i =1,n(yi− β0 − β1xi)2
+Why Squared Errors?
+         1. Squaring ensures all errors are positive.
+         2. Penalizes large deviations more heavily.
+         3. Leads to simple calculus-based formulas for β0​ and β1.
+Formulas for SLR
+β^1 =  ∑(xi−xˉ)(yi−yˉ) / ∑(xi−xˉ)2 , β^0 = yˉ−β^1xˉ
+         * β^1 → slope (change in Y per unit X)
+         * β^0​ → intercept (Y when X = 0)
+
+
+Question 6: What is Logistic Regression? How does it differ from Linear Regression? ‘
+Answer: Logistic Regression
+         * Logistic Regression is used when the dependent variable (Y) is categorical, usually binary (e.g., 0/1, Yes/No, Pass/Fail).
+         * It predicts the probability of an event occurring, not a continuous value.
+         * Uses the logistic (sigmoid) function to map predictions between 0 and 1:
+                               P(Y = 1∣X) = 1/1+e−(β0+β1X)
+            * Here:
+
+               * P(Y=1∣X) = probability that Y = 1 given X
+               * β0 = intercept, β1= coefficient (effect of X on log-odds of Y)
+
+                  * Output: Probability between 0 and 1; usually converted to a class using a threshold (e.g., 0.5).
+Key Difference Between Logistic Regression and Linear Regression
+Features
+	Linear Regression
+	Logistic Regression
+	Dependent Variable
+	Continuous
+	Categorical(Binary/Multi- Class)
+	Output
+	Real Number
+	Probability(0-1)
+	Equation
+	Y=β0+β1X
+	P(Y=1)=1/(1+e−(β0​+β1​X))
+	Error Minimization
+	Least Squares
+	Maximum Likelihood Estimation(MLE)
+	Use Case
+	Predict sales, temperature, yield
+	Predict pass/fail, disease yes/no, churn
+	
+
+
+
+
+
+
+
+
+
+Question 7: Name and briefly describe three common evaluation metrics for regression models. 
+Answer: 1. Mean Absolute Error (MAE)
+                  * Definition: Average of the absolute differences between actual (yi​) and predicted (y^i) values.
+                                 MAE = 1/n∑i=1, n∣yi−y^i∣
+                     * Interpretation: Measures the average magnitude of errors, regardless of direction.
+                     * Pros: Easy to understand; not heavily influenced by outliers.
+2. Mean Squared Error (MSE) / Root Mean Squared Error (RMSE)
+                     * Definition: Average of squared differences between actual and predicted values. RMSE is the square root of MSE.
+MSE = 1 / n ∑i=1,n(yi−y^i)2, RMSE = 
+                     * Interpretation: Penalizes larger errors more than smaller ones. RMSE has the same units as Y.
+                        * Pros: Sensitive to large errors; commonly used in practice.
+3. R-squared (R²)
+                        * Definition: Proportion of the variance in the dependent variable explained by the independent variable(s).
+                                     R2=1−SSres/SStot
+where, SSres=∑(yi−y^i)^2 and SStot=∑(yi−yˉ)^2
+                        * Interpretation: Ranges from 0 to 1; closer to 1 → better model fit.
+                        * Pros: Indicates goodness-of-fit; widely used in regression analysis.
+ 
+Question 8: What is the purpose of the R-squared metric in regression analysis? 
+Answer:  The R-squared (R^2) metric in regression analysis measures how well the independent variable(s) explain the variation in the dependent variable.
+Key Points
+                        1. Definition:
+            R2 = 1− Sum of Squared Residuals (SSres) / Total Sum of Squares (SStot)
+
+                        * SSres = ∑(yi−y^i)^2 → unexplained variation
+                        * SStot=∑(yi−yˉ)^2 → total variation
+
+                           2. Interpretation:
+                           * R² = 1: Model explains all variability in Y → perfect fit
+                           * R² = 0: Model explains none of the variability → predicts no better than the mean
+                           * 0 < R² < 1: Proportion of variance explained by the model
+
+                              3. Purpose:
+                              * Quantifies goodness-of-fit: how well the regression line matches the data
+                              * Helps compare different models: higher R² generally indicates a better model (but beware of overfitting)
+
+
+
+
+Question 9: Write Python code to fit a simple linear regression model using scikit-learn and print the slope and intercept. (Include your Python code and output in the code box below.) 
+Answer: 
+# Import libraries
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+
+# Example data
+# X = independent variable (e.g., size in sq.ft)
+# y = dependent variable (e.g., house price in ₹)
+X = np.array([800, 1000, 1200, 1500, 1800]).reshape(-1, 1)
+y = np.array([3000000, 4000000, 5000000, 6500000, 7200000])
+
+
+# Create and fit the model
+model = LinearRegression()
+model.fit(X, y)
+
+
+# Print slope and intercept
+print("Intercept (β0):", model.intercept_)
+print("Slope (β1):", model.coef_[0])
+
+
+# Optional: predict for a new value
+new_size = np.array([[1300]])
+predicted_price = model.predict(new_size)
+print("Predicted price for 1300 sq.ft:", predicted_price[0])
+	
+
+#OUTPUT
+Intercept (β0): 500000.0
+Slope (β1): 3500.0
+Predicted price for 1300 sq.ft: 5000000.0
+	
+
+Question 10: How do you interpret the coefficients in a simple linear regression model? 
+Answer:  In Simple Linear Regression (SLR), the model is:
+                                                             Y^=β0+β1X
+The coefficients β0(intercept) and β1(slope) are interpreted as follows:
+1. Intercept (β0​)
+                              * Definition: The value of Y^ when X=0.
+                              * Interpretation: Baseline value of the dependent variable.
+                              * Example: In a house price model:
+                              * If β0=500,000, it represents the predicted price when house size is 0 sq.ft (mostly theoretical).
+2. Slope (β1)
+                              * Definition: The change in Y^ for a one-unit increase in X.
+                              * Interpretation: Measures the strength and direction of the relationship.
+
+                                 * Positive β1​: Y increases as X increases
+                                 * Negative β1​: Y decreases as X increases
+                                 * Example:
+                                 * If β1=3,500 in the house price model, then for every extra 1 sq.ft, the predicted price increases by ₹3,500.
