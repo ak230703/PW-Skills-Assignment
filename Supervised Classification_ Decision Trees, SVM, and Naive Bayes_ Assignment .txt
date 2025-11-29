@@ -1,0 +1,372 @@
+﻿Supervised Classification: Decision Trees, SVM, and Naive Bayes| Assignment 
+
+
+Question 1 :  What is Information Gain, and how is it used in Decision Trees?
+Answer:  Information Gain (IG)
+Definition:
+Information Gain is a metric used in decision tree algorithms (like ID3) to measure how well a feature (attribute) separates the data into target classes. It quantifies the reduction in uncertainty or entropy about the target variable after splitting the dataset based on a feature.
+In simpler terms:
+Information Gain tells us how much “useful information” a feature gives us about the class labels.
+Key Concept: Entropy
+Before understanding Information Gain, we need entropy, which measures impurity or disorder in a dataset:
+                                            Entropy(S)=−∑i=1,c 
+* S = dataset
+* c = number of classes
+* pi​ = proportion of class iii in SSS
+* If all samples belong to one class, entropy = 0 (completely pure)
+* If classes are evenly distributed, entropy = maximum (most uncertain)
+Information Gain Formula
+                   IG(S,A) = Entropy(S) − ∑v∈Values(A) ∣Sv∣ / ∣S∣ Entropy(Sv)
+Where:
+   * S = current dataset
+   * A = attribute/feature we are evaluating
+   * Values(A) = possible values of feature A
+   * Sv = subset of S where feature A=v
+Interpretation:
+   * IG(S,A) is the reduction in entropy achieved by splitting on feature A.
+   * Higher IG → feature better separates the classes → better choice for splitting.
+
+How it’s used in Decision Trees
+      1. At each node: Evaluate all candidate features using Information Gain.
+      2. Select the feature with the highest Information Gain to split the data.
+      3. Split the dataset into subsets based on the selected feature’s values.
+      4. Repeat recursively for each subset until stopping criteria are met (e.g., all samples belong to one class or max depth reached).
+
+
+
+Question 2: What is the difference between Gini Impurity and Entropy? 
+Hint: Directly compares the two main impurity measures, highlighting strengths, weaknesses, and appropriate use cases. 
+Answer:  
+Features
+	Gini Impurity
+	Entropy
+	Definition
+	Measures the probability of incorrectly classifying a randomly chosen element if it was randomly labeled according to class distribution.
+	Measures the amount of disorder or uncertainty in the dataset.
+	Formula
+	Gini(S)=1−∑i=1c​pi2​
+	Entropy(S)=−∑i=1c​pi​log2​pi​
+	Range
+	0 (pure) to < 0.5 for binary classes
+	0 (pure) to 1 for binary classes
+	Sensivity
+	Slightly less sensitive to changes in class probabilities
+	More sensitive to changes in class probabilities, especially near 0 or 1
+	Computational Cost
+	Slightly faster (no log calculations)
+	Slightly slower (requires logarithms)
+	Bias
+	Can favor larger partitions in some cases
+	More balanced, less biased toward particular splits
+	Common Use
+	Often used in CART (Classification and Regression Trees)
+	Often used in ID3, C4.5 decision tree algorithms
+	Interpretation
+	Lower value = purer node
+	Lower value = purer node
+	
+
+Question 3: What is Pre-Pruning in Decision Trees? 
+Answer:  Pre-Pruning in Decision Trees
+Definition:
+Pre-pruning (also called early stopping) is a technique used in decision tree construction where the growth of the tree is stopped early, before it perfectly classifies the training data.
+In other words: Instead of growing a full tree and then trimming it, we decide in advance not to split a node if certain conditions are not met.
+Purpose of Pre-Pruning
+         * Prevent overfitting: Deep trees can memorize training data but perform poorly on unseen data.
+         * Reduce complexity: Smaller trees are easier to interpret and faster to compute.
+         * Improve generalization: The tree is less likely to be influenced by noise.
+Common Pre-Pruning Criteria : A node will not be split if:
+         1. Maximum Depth reached (max_depth)
+         2. Minimum samples per node not met (min_samples_split)
+         3. Minimum information gain or impurity reduction is too smallThe split results in pure nodes (all samples same class)
+Example
+Suppose a decision tree is being built to predict whether to play tennis:
+         * If splitting on Outlook only reduces entropy very slightly, and we set a minimum information gain threshold, the tree will stop splitting that node.
+         * This avoids creating branches based on insignificant differences (noise) in the training set.
+Advantages of Pre-Pruning
+         * Reduces overfitting.
+         * Faster tree construction.
+         * Produces simpler, interpretable trees.
+Disadvantages
+         * Might underfit if stopping criteria are too strict.
+         * Choosing thresholds (like min_samples_split) can be tricky.
+Question 4:Write a Python program to train a Decision Tree Classifier using Gini Impurity as the criterion and print the feature importances (practical).
+ Hint: Use criterion='gini' in DecisionTreeClassifier and access .feature_importances_. 
+(Include your Python code and output in the code box below.) 
+Answer:  
+
+
+# Import necessary libraries
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+
+
+# Load example dataset (Iris)
+data = load_iris()
+X = data.data
+y = data.target
+feature_names = data.feature_names
+
+
+# Create Decision Tree Classifier using Gini Impurity
+clf = DecisionTreeClassifier(criterion='gini', random_state=42)
+
+
+# Train the classifier
+clf.fit(X, y)
+
+
+# Print feature importances
+print("Feature Importances:")
+for name, importance in zip(feature_names, clf.feature_importances_):
+    print(f"{name}: {importance:.4f}")
+	
+
+# Output
+Feature Importances:
+sepal length (cm): 0.0000
+sepal width (cm): 0.0243
+petal length (cm): 0.6392
+petal width (cm): 0.3365
+	
+
+
+
+
+
+Question 5: What is a Support Vector Machine (SVM)? 
+Answer:  Support Vector Machine (SVM)
+Definition:
+ A Support Vector Machine (SVM) is a supervised machine learning algorithm used for classification and regression tasks. Its main goal is to find the best boundary (hyperplane) that separates data points of different classes in a high-dimensional space.
+Key Concepts
+         1. Hyperplane
+
+            * A decision boundary that separates classes.
+            * In 2D: a line; in 3D: a plane; in higher dimensions: a hyperplane.
+
+               2. Support Vectors
+
+                  * The data points closest to the hyperplane.
+                  * These points define the position and orientation of the hyperplane.
+                  * The model’s decision is most sensitive to these points.
+
+                     3. Margin
+
+                        * The distance between the hyperplane and the nearest data point of any class.
+                        * SVM aims to maximize the margin (Maximum Margin Classifier) to improve generalization.
+
+Mathematical Idea
+For a binary classification:     w⋅x+b=0
+                           * w = weights vector
+                           * b = bias
+                           * x = input features
+The SVM finds www and bbb such that the margin between the nearest points of both classes is maximized.
+Handling Non-linear Data
+                           * Kernel Trick:  SVM can map data to a higher-dimensional space where it becomes linearly separable using kernel functions:
+                           * Linear
+                           * Polynomial
+                           * Radial Basis Function (RBF)
+                           * Sigmoid
+
+Advantages
+                              * Effective in high-dimensional spaces.
+                              * Works well for both linear and non-linear classification.
+                              * Robust against overfitting, especially in cases with clear margin separation.
+Disadvantages
+                              * Computationally intensive for large datasets.
+                              * Choosing the right kernel and parameters can be tricky.
+
+
+
+
+Question 6:  What is the Kernel Trick in SVM? 
+Answer: Kernel Trick in SVM
+Definition:
+The Kernel Trick is a method used in Support Vector Machines (SVM) to handle non-linearly separable data. It allows SVM to implicitly map the original input features into a higher-dimensional space without explicitly computing the transformation. In this higher-dimensional space, the data can often become linearly separable, allowing SVM to find a hyperplane to separate classes.
+Why It’s Needed
+                              * Some datasets cannot be separated by a straight line (or hyperplane) in their original feature space.
+                              * Example: XOR problem or circular decision boundaries.
+                              * Instead of manually transforming features to higher dimensions (which can be computationally expensive), kernels compute dot products in that higher-dimensional space efficiently.
+How It Works
+Suppose you have a mapping function:         ϕ(x):R^n → R^m
+                              * Instead of computing ϕ(x) explicitly, SVM uses a kernel function K(xi,xj)such that:
+                                            K(xi,xj)=ϕ(xi)⋅ϕ(xj)
+                              * This avoids computing high-dimensional vectors directly but still benefits from the transformation.
+Intuition
+                                 * Imagine points in 2D forming concentric circles (not linearly separable).
+                                 * Using a kernel (like RBF), these points are mapped to 3D, where a plane can separate them.
+                                 * Kernel Trick allows SVM to operate as if the data were transformed, without the heavy computation.
+Common Kernel Functions
+Kernel
+	Formula
+	Use Case
+	Linear
+	K(xi​,xj​)=xi​⋅xj​
+	Linearly separable data
+	Polynomial
+	K(xi​,xj​)=(xi​⋅xj​+c)d
+	Captures polynomial relationships
+	RBF/ Gussian
+	K(xi​,xj​)=exp(−γ∥xi​−xj​∥2)
+	Non-linear data, most popular
+	Sigmoid
+	K(xi​,xj​)=tanh(αxi​⋅xj​+c)
+	Neural network-like behavior
+	
+
+
+
+Question 7:  Write a Python program to train two SVM classifiers with Linear and RBF kernels on the Wine dataset, then compare their accuracies. 
+Hint:Use SVC(kernel='linear') and SVC(kernel='rbf'), then compare accuracy scores after fitting on the same dataset. 
+(Include your Python code and output in the code box below.) 
+Answer: 
+
+
+# Import necessary libraries
+from sklearn.datasets import load_wine
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+
+
+# Load the Wine dataset
+data = load_wine()
+X = data.data
+y = data.target
+
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+
+# Train SVM with Linear kernel
+svm_linear = SVC(kernel='linear', random_state=42)
+svm_linear.fit(X_train, y_train)
+y_pred_linear = svm_linear.predict(X_test)
+accuracy_linear = accuracy_score(y_test, y_pred_linear)
+
+
+# Train SVM with RBF kernel
+svm_rbf = SVC(kernel='rbf', random_state=42)
+svm_rbf.fit(X_train, y_train)
+y_pred_rbf = svm_rbf.predict(X_test)
+accuracy_rbf = accuracy_score(y_test, y_pred_rbf)
+
+
+# Print accuracies
+print(f"Accuracy with Linear Kernel: {accuracy_linear:.4f}")
+print(f"Accuracy with RBF Kernel: {accuracy_rbf:.4f}")
+	
+
+# Output
+Accuracy with Linear Kernel: 0.9815
+Accuracy with RBF Kernel: 0.9815
+	
+
+Question 8: What is the Naïve Bayes classifier, and why is it called "Naïve"? 
+Answer:  Naïve Bayes Classifier
+Definition:
+The Naïve Bayes (NB) classifier is a probabilistic machine learning algorithm based on Bayes’ Theorem. It is mainly used for classification tasks.
+It predicts the class CCC of a sample with features X=(x1,x2,...,xn) using:
+                                P(C∣X) = P(X∣C) ⋅ P(C) / P(X)
+Where:
+                                 * P(C∣X) = Posterior probability of class C given features X
+                                 * P(C) = Prior probability of class C
+                                 * P(X∣C) = Likelihood of features X given class C
+                                 * P(X)= Probability of features X (acts as a normalizing constant)
+Why it is called "Naïve"
+The algorithm is called “naïve” because it assumes that all features are independent of each other, given the class.
+                                 * In reality, features may be correlated (e.g., height and weight), but Naïve Bayes ignores this.
+                                 * Despite this “naïve” assumption, the classifier often works very well in practice, especially for text classification, spam detection, and medical diagnosis.
+
+
+
+
+Question 9: Explain the differences between Gaussian Naïve Bayes, Multinomial Naïve Bayes, and Bernoulli Naïve Bayes 
+Answer:  
+Comparison of the three main types of Naïve Bayes classifiers:
+
+
+Features
+	Gaussian Naive Bayes (GNB)
+	Multinomial Naive Bayes (MNB)
+	Bernoulli Naive Bayes (BNB)
+	Types of Data
+	Continuous numerical features
+	Discrete count features (non-negative integers)
+	Binary/Boolean features (0 or 1)
+	Assumption
+	Features are normally (Gaussian) distributed
+	Features represent frequency/counts of events
+	Features represent presence/absence of an attribute
+	Probability Model
+	Uses Gaussian probability density function:
+(P(x_i
+	C) = \frac{1}{\sqrt{2\pi\sigma_C^2}} e^{-(x_i-\mu_C)^2 / 2\sigma_C^2})
+	Uses multinomial distribution to calculate (P(x_i
+	Common Use Case
+	Predicting medical measurements, sensor readings, or any continuous numeric data
+	Text classification (word counts), document classification, spam detection
+	Text classification with binary features (e.g., word present or not), customer behavior (yes/no)
+	Example
+	Predicting tumor size or blood pressure class
+	Counting words in emails to detect spam
+	Detecting if specific keywords are present in a message to classify spam
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Question 10:  Breast Cancer Dataset Write a Python program to train a Gaussian Naïve Bayes classifier on the Breast Cancer dataset and evaluate accuracy. 
+Hint:Use GaussianNB() from sklearn.naive_bayes and the Breast Cancer dataset from sklearn.datasets. 
+(Include your Python code and output in the code box below.)
+ Answer:       
+# Import necessary libraries
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+
+# Load the Breast Cancer dataset
+data = load_breast_cancer()
+X = data.data
+y = data.target
+
+
+# Split dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+
+# Create Gaussian Naive Bayes classifier
+gnb = GaussianNB()
+
+
+# Train the classifier
+gnb.fit(X_train, y_train)
+
+
+# Predict on the test set
+y_pred = gnb.predict(X_test)
+
+
+# Evaluate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy of Gaussian Naive Bayes classifier: {accuracy:.4f}")
+	
+
+# Output
+Accuracy of Gaussian Naive Bayes classifier: 0.9351
